@@ -9,7 +9,6 @@ use Exception;
 class UserOperationService extends BaseService {
 
     private $header;
-    private $serverType;
     private static $userOperationApi =
         [
             // #1, tag: user_operations -> getUserProfile
@@ -53,8 +52,7 @@ class UserOperationService extends BaseService {
     {
         parent::__construct();
 
-        self::$jsonSchema = json_decode(file_get_contents ('jsonSchema.json'), true);
-        $this->serverType = $baseInfo->getServerType();
+        self::$jsonSchema = json_decode(file_get_contents(__DIR__. '/../jsonSchema.json'), true);
         $this->header = [
             "_token_issuer_"    => $baseInfo->getTokenIssuer(),
             "_token_"           => $baseInfo->getToken(),
@@ -80,19 +78,13 @@ class UserOperationService extends BaseService {
             $paramKey => $params,
         ];
 
-        $validateResult = self::validateOption($apiName, $option, $paramKey);
-        if ($validateResult['validate']) {
-            return ApiRequestHandler::Request(
-                self::$config[$this->serverType][self::$userOperationApi[$apiName]['baseUri']],
-                self::$userOperationApi[$apiName]['method'],
-                self::$userOperationApi[$apiName]['subUri'],
-                $option
-            );
-        }
-        else {
-            throw new Exception($validateResult['errorMessage'], self::VALIDATION_ERROR_CODE);
-        }
-
+        self::validateOption($apiName, $option, $paramKey);
+        return ApiRequestHandler::Request(
+            self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
+            self::$userOperationApi[$apiName]['method'],
+            self::$userOperationApi[$apiName]['subUri'],
+            $option
+        );
     }
 
     /**
@@ -135,19 +127,13 @@ class UserOperationService extends BaseService {
             $paramKey => $params,
         ];
 
-        $validateResult = self::validateOption($apiName, $option, $paramKey);
-        if ($validateResult['validate']) {
-            return ApiRequestHandler::Request(
-                self::$config[$this->serverType][self::$userOperationApi[$apiName]['baseUri']],
-                self::$userOperationApi[$apiName]['method'],
-                self::$userOperationApi[$apiName]['subUri'],
-                $option
-            );
-        }
-        else {
-            throw new Exception($validateResult['errorMessage'], self::VALIDATION_ERROR_CODE);
-        }
-
+        self::validateOption($apiName, $option, $paramKey);
+        return ApiRequestHandler::Request(
+            self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
+            self::$userOperationApi[$apiName]['method'],
+            self::$userOperationApi[$apiName]['subUri'],
+            $option
+        );
     }
 
     /**
@@ -171,18 +157,12 @@ class UserOperationService extends BaseService {
             $paramKey => $params,
         ];
 
-        $validateResult = self::validateOption($apiName, $option, $paramKey);
-        if ($validateResult['validate']) {
-            return ApiRequestHandler::Request(
-                self::$config[$this->serverType][self::$userOperationApi[$apiName]['baseUri']],
-                self::$userOperationApi[$apiName]['method'],
-                self::$userOperationApi[$apiName]['subUri'],
-                $option
-            );
-        }
-        else {
-            throw new Exception($validateResult['errorMessage'], self::VALIDATION_ERROR_CODE);
-        }
-
+        self::validateOption($apiName, $option, $paramKey);
+        return ApiRequestHandler::Request(
+            self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
+            self::$userOperationApi[$apiName]['method'],
+            self::$userOperationApi[$apiName]['subUri'],
+            $option
+        );
     }
 }

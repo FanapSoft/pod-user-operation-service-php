@@ -6,8 +6,8 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Fanap Soft SDK Develop Team",
-      "email": "podsdk@fanap.ir"
+      "name": "Elham Keshtgar",
+      "email": "e.keshtgar@fanap.ir;podsdk@fanap.ir"
     }
   ],
   "description": "POD SDK User Operation Service",
@@ -18,7 +18,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Pod\\User\\Operation\\Service\\" : "models/"
+      "Pod\\User\\Operation\\Service\\" : "src/"
     }
   }
 }

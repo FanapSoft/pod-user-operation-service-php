@@ -264,16 +264,17 @@
             "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Keshtgar/pod-base-service.git",
-                "reference": "996dfedb961d04e0d0daab9dac81ae3e08dc3f2e"
+                "url": "https://github.com/FanapSoft/pod-base-service-php.git",
+                "reference": "717883bd7f3dccf3a2a1f8822a9fc9d5186e317a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Keshtgar/pod-base-service/zipball/996dfedb961d04e0d0daab9dac81ae3e08dc3f2e",
-                "reference": "996dfedb961d04e0d0daab9dac81ae3e08dc3f2e",
+                "url": "https://api.github.com/repos/FanapSoft/pod-base-service-php/zipball/717883bd7f3dccf3a2a1f8822a9fc9d5186e317a",
+                "reference": "717883bd7f3dccf3a2a1f8822a9fc9d5186e317a",
                 "shasum": ""
             },
             "require": {
+                "ext-json": "*",
                 "guzzlehttp/guzzle": "^6.3",
                 "justinrainbow/json-schema": "^5.2",
                 "php": ">=5.5"
@@ -281,7 +282,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Pod\\Base\\Service\\": "models/"
+                    "Pod\\Base\\Service\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -294,13 +295,13 @@
                     "email": "podsdk@fanap.ir"
                 }
             ],
-            "description": "pod sdk common classes and methods",
+            "description": "pod sdk base service",
             "keywords": [
                 "pod sdk",
                 "pod sdk base service",
                 "sdk"
             ],
-            "time": "2019-07-23T09:46:14+00:00"
+            "time": "2019-08-31T13:31:27+00:00"
         },
         {
             "name": "psr/http-message",
