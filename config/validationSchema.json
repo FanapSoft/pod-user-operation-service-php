@@ -8,11 +8,12 @@
                     "minLength" : 1
                 },
                 "_token_issuer_": {
-                    "type": "number"
+                    "type": "number",
+                    "enum": [0, 1]
                 }
             },
             "required": ["_token_", "_token_issuer_"],
-            "additionalProperties": true
+            "additionalProperties": false
         },
         "query": {
             "type": "object",
@@ -24,6 +25,16 @@
                 "client_secret" : {
                     "type": "string",
                     "title": "کد دسترسی کلاینت"
+                },
+                "scVoucherHash": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "scApiKey": {
+                    "type": "string",
+                    "title": "توکن برای فراخوانی سرویس کال"
                 }
             },
             "required": [],
@@ -40,11 +51,12 @@
                     "minLength" : 1
                 },
                 "_token_issuer_": {
-                    "type": "number"
+                    "type": "number",
+                    "enum": [0, 1]
                 }
             },
             "required": ["_token_", "_token_issuer_"],
-            "additionalProperties": true
+            "additionalProperties": false
         },
         "form_params": {
             "type": "object",
@@ -154,6 +166,16 @@
                 "fatherName": {
                     "type": "string",
                     "title": "نام پدر"
+                },
+                "scVoucherHash": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "scApiKey": {
+                    "type": "string",
+                    "title": "توکن برای فراخوانی سرویس کال"
                 }
             },
             "required": ["nickName"],
@@ -170,11 +192,12 @@
                     "minLength" : 1
                 },
                 "_token_issuer_": {
-                    "type": "number"
+                    "type": "number",
+                    "enum": [0, 1]
                 }
             },
             "required": ["_token_", "_token_issuer_"],
-            "additionalProperties": true
+            "additionalProperties": false
         },
         "form_params": {
             "type": "object",
@@ -286,6 +309,16 @@
                 "fatherName": {
                     "type": "string",
                     "title": "نام پدر"
+                },
+                "scVoucherHash": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "scApiKey": {
+                    "type": "string",
+                    "title": "توکن برای فراخوانی سرویس کال"
                 }
             },
             "required": ["nickName"],
@@ -302,11 +335,12 @@
                     "minLength" : 1
                 },
                 "_token_issuer_": {
-                    "type": "number"
+                    "type": "number",
+                    "enum": [0, 1]
                 }
             },
             "required": ["_token_", "_token_issuer_"],
-            "additionalProperties": true
+            "additionalProperties": false
         },
 
         "form_params": {
@@ -321,14 +355,24 @@
                     "title": "شماره دریافت کننده پیامک",
                     "pattern" : "^(0|\\+98|0098){1}[9]{1}[\\d]{9}$",
                     "pattern_description": "به صورت 09123456789 وارد شود"
+                },
+                "scApiKey": {
+                    "type": "string",
+                    "title": "توکن برای فراخوانی سرویس کال"
+                },
+                "scVoucherHash": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             },
-            "required": [],
+            "required": ["code", "cellphoneNumber"],
             "additionalProperties": false
         }
     },
 
-    "listAddress": {
+    "getListAddress": {
         "header": {
             "type": "object",
             "properties": {
@@ -337,11 +381,12 @@
                     "minLength" : 1
                 },
                 "_token_issuer_": {
-                    "type": "number"
+                    "type": "number",
+                    "enum": [0, 1]
                 }
             },
             "required": ["_token_", "_token_issuer_"],
-            "additionalProperties": true
+            "additionalProperties": false
         },
 
         "query": {
@@ -354,6 +399,16 @@
                 "size": {
                     "type": "integer",
                     "title": "تعداد رکورد در هر صفحه"
+                },
+                "scVoucherHash": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "scApiKey": {
+                        "type": "string",
+                        "title": "توکن برای فراخوانی سرویس کال"
+                    }
                 }
             },
             "required": ["offset"],

@@ -3,59 +3,19 @@ namespace Pod\User\Operation\Service;
 
 use Pod\Base\Service\BaseService;
 use Pod\Base\Service\ApiRequestHandler;
-use Exception;
 
 class UserOperationService extends BaseService {
 
-    private $header;
-    private static $userOperationApi =
-        [
-            // #1, tag: user_operations -> getUserProfile
-            'getUserProfile' => [
-                'baseUri'   => 'PLATFORM-ADDRESS',
-                'subUri'    => 'nzh/getUserProfile/',
-                'method'    => 'GET'
-            ],
+    private static $userOperationApi;
+    private static $serviceProductId;
 
-            // #2, tag: user_operations -> editProfile
-            'editProfile' => [
-                'baseUri'   => 'PLATFORM-ADDRESS',
-                'subUri'    => 'nzh/editProfile/',
-                'method'    => 'POST'
-            ],
-
-            // #3, tag: user_operations -> editProfileWithConfirmation
-            'editProfileWithConfirmation' => [
-                'baseUri'   => 'PLATFORM-ADDRESS',
-                'subUri'    => 'nzh/editProfileWithConfirmation/',
-                'method'    => 'POST'
-            ],
-
-            // #4, tag: user_operations -> confirmEditProfile
-            'confirmEditProfile' => [
-                'baseUri'   => 'PLATFORM-ADDRESS',
-                'subUri'    => 'nzh/confirmEditProfile/',
-                'method'    => 'POST'
-            ],
-
-            // #5, tag: user_operations -> listAddress
-            'listAddress' => [
-                'baseUri'   => 'PLATFORM-ADDRESS',
-                'subUri'    => 'nzh/listAddress/',
-                'method'    => 'GET'
-            ],
-
-        ];
-
-    public function __construct($baseInfo)
+    public function __construct()
     {
         parent::__construct();
 
-        self::$jsonSchema = json_decode(file_get_contents(__DIR__. '/../jsonSchema.json'), true);
-        $this->header = [
-            "_token_issuer_"    => $baseInfo->getTokenIssuer(),
-            "_token_"           => $baseInfo->getToken(),
-        ];
+        self::$jsonSchema = json_decode(file_get_contents(__DIR__ . '/../config/validationSchema.json'), true);
+        self::$userOperationApi = require __DIR__ . '/../config/apiConfig.php';
+        self::$serviceProductId = require __DIR__ . '/../config/serviceProductId.php';
     }
 
 
@@ -63,26 +23,58 @@ class UserOperationService extends BaseService {
      * @param array $params
      *      @option string "client_id"
      *      @option string "client_secret"
+     *      @option string  "_token_"
+     *      @option string  "_token_issuer_"
+     *      @option string  "scVoucherHash"
+     *      @option string  "scApiKey"
      * @throws
      * @return mixed
     */
     public function getUserProfile ($params) {
         $apiName = 'getUserProfile';
-        $paramKey = self::$userOperationApi[$apiName]['method'] == 'GET' ? 'query' : 'form_params';
+        $optionHasArray = false;
+        $method = self::$userOperationApi[$apiName]['method'];
+        $paramKey = $method == 'GET' ? 'query' : 'form_params';
 
+        $header = [
+            '_token_issuer_' => 1,
+            '_token_'   => ''
+        ];
         array_walk_recursive($params, 'self::prepareData');
 
+        // set tokenIssuer in header
+        if (isset($params['tokenIssuer'])) {
+            $header['_token_issuer_'] = $params['tokenIssuer'];
+            unset($params['tokenIssuer']);
+        }
+
+        // set token in header
+        if (isset($params['token'])) {
+            $header['_token_'] = $params['token'];
+            unset($params['token']);
+        }
+
         $option = [
-            'headers' => $this->header,
+            'headers' => $header,
             $paramKey => $params,
         ];
 
         self::validateOption($apiName, $option, $paramKey);
+        // prepare params to send
+        $option[$paramKey]['scProductId'] = self::$serviceProductId[$apiName];
+        if (isset($params['scVoucherHash'])) {
+            $option['withoutBracketParams'] =  $option[$paramKey];
+            unset($option[$paramKey]);
+            $optionHasArray = true;
+            $method = 'GET';
+        }
         return ApiRequestHandler::Request(
             self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
-            self::$userOperationApi[$apiName]['method'],
+            $method,
             self::$userOperationApi[$apiName]['subUri'],
-            $option
+            $option,
+            false,
+            $optionHasArray
         );
     }
 
@@ -110,6 +102,10 @@ class UserOperationService extends BaseService {
      *      @option string  "birthState"
      *      @option string  "identificationNumber"
      *      @option string  "fatherName"
+     *      @option string  "_token_"
+     *      @option string  "_token_issuer_"
+     *      @option string  "scVoucherHash"
+     *      @option string  "scApiKey"
      * @throws
 
      * @return mixed
@@ -117,21 +113,112 @@ class UserOperationService extends BaseService {
 
     public function editProfileWithConfirmation ($params) {
         $apiName = 'editProfileWithConfirmation';
-        $paramKey = self::$userOperationApi[$apiName]['method'] == 'GET' ? 'query' : 'form_params';
+        $optionHasArray = false;
+        $method = self::$userOperationApi[$apiName]['method'];
+        $paramKey = $method == 'GET' ? 'query' : 'form_params';
+
+        $header = [
+            '_token_issuer_' => 1,
+            '_token_'   => ''
+        ];
 
         array_walk_recursive($params, 'self::prepareData');
 
+        // set tokenIssuer in header
+        if (isset($params['tokenIssuer'])) {
+            $header['_token_issuer_'] = $params['tokenIssuer'];
+            unset($params['tokenIssuer']);
+        }
+
+        // set token in header
+        if (isset($params['token'])) {
+            $header['_token_'] = $params['token'];
+            unset($params['token']);
+        }
+
         $option = [
-            'headers' => $this->header,
+            'headers' => $header,
             $paramKey => $params,
         ];
 
+
         self::validateOption($apiName, $option, $paramKey);
+        // prepare params to send
+        $option[$paramKey]['scProductId'] = self::$serviceProductId[$apiName];
+        if (isset($params['scVoucherHash'])) {
+            $option['withoutBracketParams'] =  $option[$paramKey];
+            unset($option[$paramKey]);
+            $optionHasArray = true;
+            $method = 'GET';
+        }
         return ApiRequestHandler::Request(
             self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
-            self::$userOperationApi[$apiName]['method'],
+            $method,
             self::$userOperationApi[$apiName]['subUri'],
-            $option
+            $option,
+            false,
+            $optionHasArray
+        );
+    }
+
+    /**
+     * @param array $params
+     *      @option string  "code"
+     *      @option string  "cellphoneNumber"
+     *      @option string  "_token_"
+     *      @option string  "_token_issuer_"
+     *      @option string  "scVoucherHash"
+     *      @option string  "scApiKey"
+     * @throws
+
+     * @return mixed
+     */
+
+    public function confirmEditProfile ($params) {
+        $apiName = 'confirmEditProfile';
+        $optionHasArray = false;
+        $method = self::$userOperationApi[$apiName]['method'];
+        $paramKey = $method == 'GET' ? 'query' : 'form_params';
+        $header = [
+            '_token_issuer_' => 1,
+            '_token_'   => ''
+        ];
+
+        array_walk_recursive($params, 'self::prepareData');
+
+        // set tokenIssuer in header
+        if (isset($params['tokenIssuer'])) {
+            $header['_token_issuer_'] = $params['tokenIssuer'];
+            unset($params['tokenIssuer']);
+        }
+
+        // set token in header
+        if (isset($params['token'])) {
+            $header['_token_'] = $params['token'];
+            unset($params['token']);
+        }
+        $option = [
+            'headers' => $header,
+            $paramKey => $params,
+        ];
+
+
+        self::validateOption($apiName, $option, $paramKey);
+        // prepare params to send
+        $option[$paramKey]['scProductId'] = self::$serviceProductId[$apiName];
+        if (isset($params['scVoucherHash'])) {
+            $option['withoutBracketParams'] =  $option[$paramKey];
+            unset($option[$paramKey]);
+            $optionHasArray = true;
+            $method = 'GET';
+        }
+        return ApiRequestHandler::Request(
+            self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
+            $method,
+            self::$userOperationApi[$apiName]['subUri'],
+            $option,
+            false,
+            $optionHasArray
         );
     }
 
@@ -141,27 +228,58 @@ class UserOperationService extends BaseService {
      *      @option string  "client_secret"
      *      @option string  "offset"
      *      @option string  "lastName"
+     *      @option string  "_token_"
+     *      @option string  "_token_issuer_"
+     *      @option string  "scVoucherHash"
+     *      @option string  "scApiKey"
      * @return mixed
      * @throws
      */
 
-    public function listAddress ($params) {
-        $apiName = 'listAddress';
-        $paramKey = self::$userOperationApi[$apiName]['method'] == 'GET' ? 'query' : 'form_params';
+    public function getListAddress ($params) {
+        $apiName = 'getListAddress';
+        $optionHasArray = false;
+        $method = self::$userOperationApi[$apiName]['method'];
+        $paramKey = $method == 'GET' ? 'query' : 'form_params';
+        $header = [
+            '_token_issuer_' => 1,
+            '_token_'   => ''
+        ];
 
         array_walk_recursive($params, 'self::prepareData');
 
+        // set tokenIssuer in header
+        if (isset($params['tokenIssuer'])) {
+            $header['_token_issuer_'] = $params['tokenIssuer'];
+            unset($params['tokenIssuer']);
+        }
+
+        // set token in header
+        if (isset($params['token'])) {
+            $header['_token_'] = $params['token'];
+            unset($params['token']);
+        }
         $option = [
-            'headers' => $this->header,
+            'headers' => $header,
             $paramKey => $params,
         ];
 
         self::validateOption($apiName, $option, $paramKey);
+        // prepare params to send
+        $option[$paramKey]['scProductId'] = self::$serviceProductId[$apiName];
+        if (isset($params['scVoucherHash'])) {
+            $option['withoutBracketParams'] =  $option[$paramKey];
+            unset($option[$paramKey]);
+            $optionHasArray = true;
+            $method = 'GET';
+        }
         return ApiRequestHandler::Request(
             self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
-            self::$userOperationApi[$apiName]['method'],
+            $method,
             self::$userOperationApi[$apiName]['subUri'],
-            $option
+            $option,
+            false,
+            $optionHasArray
         );
     }
 }
