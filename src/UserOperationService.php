@@ -8,6 +8,7 @@ class UserOperationService extends BaseService {
 
     private static $userOperationApi;
     private static $serviceProductId;
+    private static $baseUri;
 
     public function __construct()
     {
@@ -16,8 +17,9 @@ class UserOperationService extends BaseService {
         self::$jsonSchema = json_decode(file_get_contents(__DIR__ . '/../config/validationSchema.json'), true);
         self::$userOperationApi = require __DIR__ . '/../config/apiConfig.php';
         self::$serviceProductId = require __DIR__ . '/../config/serviceProductId.php';
+        self::$baseUri = self::$config[self::$serverType];
+        self::$serviceProductId = self::$serviceProductId[self::$serverType];
     }
-
 
     /**
      * @param array $params
