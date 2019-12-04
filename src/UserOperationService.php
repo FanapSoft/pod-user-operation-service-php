@@ -6,6 +6,7 @@ use Pod\Base\Service\ApiRequestHandler;
 
 class UserOperationService extends BaseService {
 
+    private static $jsonSchema;
     private static $userOperationApi;
     private static $serviceProductId;
     private static $baseUri;
@@ -61,7 +62,7 @@ class UserOperationService extends BaseService {
             $paramKey => $params,
         ];
 
-        self::validateOption($apiName, $option, $paramKey);
+        self::validateOption($option, self::$jsonSchema[$apiName], $paramKey);
         // prepare params to send
         $option[$paramKey]['scProductId'] = self::$serviceProductId[$apiName];
         if (isset($params['scVoucherHash'])) {
@@ -71,7 +72,7 @@ class UserOperationService extends BaseService {
             $method = 'GET';
         }
         return ApiRequestHandler::Request(
-            self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
+            self::$baseUri[self::$userOperationApi[$apiName]['baseUri']],
             $method,
             self::$userOperationApi[$apiName]['subUri'],
             $option,
@@ -144,7 +145,7 @@ class UserOperationService extends BaseService {
         ];
 
 
-        self::validateOption($apiName, $option, $paramKey);
+        self::validateOption($option, self::$jsonSchema[$apiName], $paramKey);
         // prepare params to send
         $option[$paramKey]['scProductId'] = self::$serviceProductId[$apiName];
         if (isset($params['scVoucherHash'])) {
@@ -154,7 +155,7 @@ class UserOperationService extends BaseService {
             $method = 'GET';
         }
         return ApiRequestHandler::Request(
-            self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
+            self::$baseUri[self::$userOperationApi[$apiName]['baseUri']],
             $method,
             self::$userOperationApi[$apiName]['subUri'],
             $option,
@@ -204,8 +205,7 @@ class UserOperationService extends BaseService {
             $paramKey => $params,
         ];
 
-
-        self::validateOption($apiName, $option, $paramKey);
+        self::validateOption($option, self::$jsonSchema[$apiName], $paramKey);
         // prepare params to send
         $option[$paramKey]['scProductId'] = self::$serviceProductId[$apiName];
         if (isset($params['scVoucherHash'])) {
@@ -215,7 +215,7 @@ class UserOperationService extends BaseService {
             $method = 'GET';
         }
         return ApiRequestHandler::Request(
-            self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
+            self::$baseUri[self::$userOperationApi[$apiName]['baseUri']],
             $method,
             self::$userOperationApi[$apiName]['subUri'],
             $option,
@@ -266,7 +266,7 @@ class UserOperationService extends BaseService {
             $paramKey => $params,
         ];
 
-        self::validateOption($apiName, $option, $paramKey);
+        self::validateOption($option, self::$jsonSchema[$apiName], $paramKey);
         // prepare params to send
         $option[$paramKey]['scProductId'] = self::$serviceProductId[$apiName];
         if (isset($params['scVoucherHash'])) {
@@ -276,7 +276,7 @@ class UserOperationService extends BaseService {
             $method = 'GET';
         }
         return ApiRequestHandler::Request(
-            self::$config[self::$serverType][self::$userOperationApi[$apiName]['baseUri']],
+            self::$baseUri[self::$userOperationApi[$apiName]['baseUri']],
             $method,
             self::$userOperationApi[$apiName]['subUri'],
             $option,

@@ -24,7 +24,7 @@ return          [
     // #4 confirmEditProfile
     'confirmEditProfile' => [
         'baseUri'   => 'PLATFORM-ADDRESS',
-        'subUri' => 'nzh/doServiceCalle',
+        'subUri' => 'nzh/doServiceCall',
         'method'    => 'POST'
     ],
 
